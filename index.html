@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Mice & Dice</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- 🔵 START -->
+<div id="start-screen">
+  <h1>Mice & Dice</h1>
+  <p>Escolha ações, role os dados e sobreviva até o fim.</p>
+  <button onclick="startGame()">Iniciar</button>
+</div>
+
+<!-- 🎮 GAME -->
+<div id="game" style="display:none">
+
+  <h2>❤️ Vida: <span id="hp">10</span></h2>
+
+  <div id="event-box">-</div>
+
+  <!-- 🎲 DADO -->
+  <div id="dice-container">
+    <div id="dice" class="dice">🎲</div>
+    <div id="dice-label">Rolagem de dados:</div>
+    <div id="dice-result">0</div>
+  </div>
+
+  <!-- ⚔️ BOTÕES -->
+  <div id="buttons"></div>
+
+  <div>📊 Progresso: <span id="progress">0</span>/20</div>
+
+</div>
+
+<!-- 🏁 END -->
+<div id="end-screen" style="display:none">
+  <h2 id="end-text"></h2>
+  <button onclick="restartGame()">Recomeçar</button>
+  <button onclick="exitGame()">Sair</button>
+</div>
+
+<script src="events.js"></script>
+<script src="classes.js"></script>
+<script src="game.js"></script>
+
+</body>
+</html>
+
