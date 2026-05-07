@@ -1,5 +1,7 @@
 console.log("GAME OK");
 
+let activeTimeouts = [];
+
 let gameOver = false;
 let isRolling = false;
 
@@ -18,13 +20,23 @@ function rollDice() {
 
 /* 🚀 start */
 function startGame() {
-  document.getElementById("start-screen").style.display = "none";
-  document.getElementById("end-screen").style.display = "none";
-  document.getElementById("game").style.display = "block";
+  activeTimeouts.forEach(clearTimeout);
+  activeTimeouts = [];
 
   player.hp = 10;
   progress = 0;
+
   gameOver = false;
+  isRolling = false;
+
+  currentEvent = null;
+
+  /* 🔥 RESET VISUAL GARANTIDO */
+  document.getElementById("game").style.display = "block";
+  document.getElementById("start-screen").style.display = "none";
+  document.getElementById("end-screen").style.display = "none";
+
+  setDice("...");
 
   newEvent();
   updateHUD();
@@ -39,41 +51,41 @@ function newEvent() {
   document.getElementById("event-box").innerText = currentEvent.text;
 
   renderOptions();
-  updateHUD();
-
   setDice("...");
+  updateHUD();
 }
 
 /* ⚔️ botões */
 function renderOptions() {
   const container = document.getElementById("buttons");
+
+  if (!container || !currentEvent) return;
+
   container.innerHTML = "";
 
   currentEvent.options.forEach(opt => {
     const btn = document.createElement("button");
-    btn.innerText = opt;
-    btn.onclick = () => choose(opt);
+    btn.innerText = opt.label;
+    btn.onclick = () => choose(opt.effect);
     container.appendChild(btn);
   });
 }
 
 /* 🧠 escolha */
-function choose(option) {
+function choose(effect) {
   if (gameOver || isRolling) return;
 
   isRolling = true;
 
   setDice("...");
-
   animateDiceRoll();
 
-  setTimeout(() => {
+  const t1 = setTimeout(() => {
 
     const roll = rollDice();
-
     setDice(roll);
 
-    resolveEvent(roll, option);
+    resolveEvent(effect);
 
     progress++;
     updateHUD();
@@ -86,35 +98,30 @@ function choose(option) {
       return endGame("🏆 Vitória!");
     }
 
-    setTimeout(() => {
+    const t2 = setTimeout(() => {
       isRolling = false;
       newEvent();
-    }, 1200);
+    }, 900);
+
+    activeTimeouts.push(t2);
 
   }, 500);
+
+  activeTimeouts.push(t1);
 }
 
-/* ⚔️ lógica */
-function resolveEvent(roll, option) {
+/* ⚔️ lógica de efeito */
+function resolveEvent(effect) {
 
-  let type =
-    roll <= 6 ? "low" :
-    roll <= 13 ? "mid" :
-    "high";
+  const value = Math.floor(Math.random() * 5) + 1;
 
-  let damage = 0;
-
-  if (currentEvent.type === "combat") {
-    if (type === "low") damage = 2;
-    if (type === "mid") damage = 1;
+  if (effect === "damage") {
+    player.hp -= value;
   }
 
-  if (currentEvent.type === "heal") {
-    if (type === "high") player.hp += 3;
-    if (type === "mid") player.hp += 1;
+  if (effect === "heal") {
+    player.hp += value;
   }
-
-  player.hp -= damage;
 
   if (player.hp > player.maxHp) player.hp = player.maxHp;
   if (player.hp < 0) player.hp = 0;
@@ -129,6 +136,10 @@ function updateHUD() {
 /* 🏁 fim */
 function endGame(text) {
   gameOver = true;
+  isRolling = false;
+
+  activeTimeouts.forEach(clearTimeout);
+  activeTimeouts = [];
 
   document.getElementById("game").style.display = "none";
   document.getElementById("end-screen").style.display = "flex";
@@ -145,7 +156,7 @@ function exitGame() {
   location.reload();
 }
 
-/* 🎲 UI DO DADO */
+/* 🎲 UI */
 function setDice(value) {
   document.getElementById("dice-result").innerText = value;
 }
