@@ -1,30 +1,39 @@
-/* 🟣 START / END BUTTONS em linha */
+/* 🟣 START / END SCREENS */
+#start-screen,
+#end-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+
+  background: radial-gradient(circle at top, #1b1b1b, #0d0d0d);
+}
+
+/* 🟢 BOTÕES START / END */
 #start-screen button,
 #end-screen button {
   flex: none;
   width: 140px;
-  margin: 10px;
+  margin: 6px;
 }
 
-/* organiza lado a lado */
-#start-screen,
-#end-screen {
-  gap: 10px;
+/* 🟣 TEXTO START */
+#start-screen p {
+  opacity: 0.7;
+  max-width: 260px;
+  text-align: center;
 }
 
-body {
-  margin: 0;
-  font-family: system-ui;
-  background: radial-gradient(circle at top, #1b1b1b, #0d0d0d);
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-/* 🎮 game box */
+/* 🎮 GAME AREA */
 #game {
+  position: relative;
+  z-index: 1;
+
   width: 360px;
   padding: 20px;
   border-radius: 20px;
@@ -35,24 +44,7 @@ body {
   box-shadow: 0 10px 40px rgba(0,0,0,0.5);
 }
 
-/* 🟣 screens */
-#start-screen, #end-screen {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: radial-gradient(circle at top, #1b1b1b, #0d0d0d);
-}
-
-#start-screen p {
-  opacity: 0.7;
-  max-width: 260px;
-  text-align: center;
-}
-
-/* 🎲 dice */
+/* 🎲 DICE */
 #dice-container {
   margin: 12px 0;
   display: flex;
@@ -80,14 +72,14 @@ body {
   font-weight: bold;
 }
 
-/* 📦 event */
+/* 📦 EVENT BOX */
 #event-box {
   margin: 12px 0;
   font-size: 17px;
   opacity: 0.9;
 }
 
-/* ⚔️ buttons */
+/* ⚔️ BUTTONS */
 #buttons {
   display: flex;
   gap: 10px;
@@ -101,8 +93,10 @@ button {
   padding: 12px;
   border-radius: 12px;
   border: none;
+
   background: rgba(255,255,255,0.08);
   color: white;
+
   cursor: pointer;
   transition: 0.15s;
 }
@@ -113,4 +107,23 @@ button:hover {
 
 button:active {
   transform: scale(0.95);
+}
+
+/* 📊 PROGRESS */
+#progress {
+  font-weight: bold;
+}
+
+/* 🧠 GLOBAL BODY */
+body {
+  margin: 0;
+  font-family: system-ui;
+
+  background: radial-gradient(circle at top, #1b1b1b, #0d0d0d);
+  color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
