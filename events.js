@@ -1,71 +1,119 @@
-const events = [
+const baseEvents = [
   {
-    id: "hooded_rat",
-    text: "Um rato encapuzado bloqueia seu caminho.",
+    text: "Um rato selvagem aparece!",
     type: "combat",
-    options: ["Enfrentar", "Fugir"]
+    options: [
+      { label: "Atacar", effect: "damage" },
+      { label: "Fugir", effect: "none" }
+    ]
   },
-
   {
-    id: "cheese_found",
-    text: "Você encontra um pedaço de queijo esquecido.",
+    text: "Você encontrou um queijo no chão.",
     type: "heal",
-    options: ["Comer", "Guardar"]
+    options: [
+      { label: "Comer", effect: "heal" },
+      { label: "Largar", effect: "none" }
+    ]
   },
-
   {
-    id: "dark_hole",
-    text: "Uma toca escura emana um cheiro estranho.",
-    type: "risk",
-    options: ["Entrar", "Ignorar"]
+    text: "Um corredor escuro à frente.",
+    type: "combat",
+    options: [
+      { label: "Avançar", effect: "damage" },
+      { label: "Recuar", effect: "none" }
+    ]
   },
-
   {
-    id: "split_path",
-    text: "Os túneis se dividem em dois caminhos.",
-    type: "choice",
-    options: ["Esquerda", "Direita"]
+    text: "Uma fonte de energia misteriosa.",
+    type: "heal",
+    options: [
+      { label: "Beber", effect: "heal" },
+      { label: "Ignorar", effect: "none" }
+    ]
   },
-
   {
-    id: "sleeping_cat",
-    text: "Um gato dorme perto da saída do túnel.",
-    type: "stealth",
-    options: ["Passar devagar", "Esperar"]
+    text: "Um inimigo raquítico te observa.",
+    type: "combat",
+    options: [
+      { label: "Atacar", effect: "damage" },
+      { label: "Fugir", effect: "none" }
+    ]
   },
-
   {
-    id: "old_trap",
-    text: "Uma ratoeira velha trava a passagem.",
-    type: "risk",
-    options: ["Desarmar", "Contornar"]
+    text: "Um baú fedorento aparece.",
+    type: "heal",
+    options: [
+      { label: "Abrir", effect: "heal" },
+      { label: "Ignorar", effect: "none" }
+    ]
   },
-
   {
-    id: "golden_cheese",
-    text: "Um queijo dourado brilha no escuro.",
-    type: "reward",
-    options: ["Pegar", "Ignorar"]
+    text: "O chão treme à sua volta.",
+    type: "combat",
+    options: [
+      { label: "Correr", effect: "damage" },
+      { label: "Firmar", effect: "none" }
+    ]
   },
-
   {
-    id: "strange_merchant",
-    text: "Um mercador rato oferece uma poção suspeita.",
-    type: "item",
-    options: ["Aceitar", "Recusar"]
+    text: "Você encontra queijos curativos.",
+    type: "heal",
+    options: [
+      { label: "Comer", effect: "heal" },
+      { label: "Largar", effect: "none" }
+    ]
   },
-
   {
-    id: "tiny_bridge",
-    text: "Uma ponte improvisada balança sobre o esgoto.",
-    type: "risk",
-    options: ["Atravessar", "Voltar"]
+    text: "Você ouve um som estranho no escuro.",
+    type: "combat",
+    options: [
+      { label: "Investigar", effect: "damage" },
+      { label: "Evitar", effect: "none" }
+    ]
   },
-
   {
-    id: "echo_noise",
-    text: "Você ouve barulhos ecoando pelos túneis.",
-    type: "mystery",
-    options: ["Investigar", "Se esconder"]
+    text: "Uma toca segura parece surgir.",
+    type: "heal",
+    options: [
+      { label: "Descansar", effect: "heal" },
+      { label: "Seguir", effect: "none" }
+    ]
   }
 ];
+
+let eventQueue = [];
+let lastEvent = null;
+
+function buildQueue() {
+  eventQueue = [];
+
+  baseEvents.forEach(ev => {
+    eventQueue.push({ ...ev });
+    eventQueue.push({ ...ev });
+  });
+
+  shuffle(eventQueue);
+}
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function getRandomEvent() {
+  if (eventQueue.length === 0) buildQueue();
+
+  let next = eventQueue.shift();
+
+  if (lastEvent && next.text === lastEvent.text) {
+    eventQueue.push(next);
+    next = eventQueue.shift();
+  }
+
+  lastEvent = next;
+  return next;
+}
+
+buildQueue();
